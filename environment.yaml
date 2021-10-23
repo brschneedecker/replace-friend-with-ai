@@ -1,0 +1,5 @@
+name: jabber_html_env
+channels:
+  - defaults
+dependencies:
+  - python=3.7.3
