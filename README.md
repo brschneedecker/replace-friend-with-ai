@@ -50,4 +50,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* TBD
+* https://www.pluralsight.com/guides/extracting-data-html-beautifulsoup
+* https://www.geeksforgeeks.org/how-to-scrape-data-from-local-html-files-using-python/
+* https://beautiful-soup-4.readthedocs.io/en/latest/index.html?highlight=select_one
+* https://www.geeksforgeeks.org/how-to-parse-local-html-file-in-python/
+
