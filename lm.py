@@ -1,12 +1,8 @@
-############################################################
-# Use Jabber messages to train a language model
-############################################################
-
-# Include your imports here, if any are used.
 import string
 import random
 import math
-import jabberMessage
+import messageParser
+import config
 
 
 def tokenize(text):
@@ -111,11 +107,14 @@ class NgramModel(object):
 
         for i in range(token_count):
             new_token = self.random_token(tuple(context))
-            tokens.append(new_token)
 
             if new_token == "<END>":
-                context = self.reset_context()
+                if len(tokens) > 0:
+                    break
+                else:
+                    context = self.reset_context()
             else:
+                tokens.append(new_token)
                 if self.n > 1:
                     context = context[1:]
                     context.append(new_token)
@@ -126,9 +125,14 @@ def create_ngram_model(n, path):
 
     m = NgramModel(n)
 
-    messages = jabberMessage.parse_all_html_files(path)
+    my_name = config.my_name
+    buddy_name = config.buddy_name
+    buddy_number = config.buddy_number
 
-    for message in messages:
+    for message in messageParser.parse_all_html_files(path):
+        m.update(message.get_msg_text())
+
+    for message in messageParser.parse_all_xml_files(path, my_name, buddy_name, buddy_number):
         m.update(message.get_msg_text())
 
     return m
