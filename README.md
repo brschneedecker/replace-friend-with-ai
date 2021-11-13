@@ -31,7 +31,7 @@ conda env create --file=environment.yaml
 Activate the newly created environment
 
 ```bash
-conda activate jabber_html_env
+conda activate chats_ai_env
 ```
 
 If you have issues with the environment after creation, you can remove it with the following
@@ -54,4 +54,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * https://www.geeksforgeeks.org/how-to-scrape-data-from-local-html-files-using-python/
 * https://beautiful-soup-4.readthedocs.io/en/latest/index.html?highlight=select_one
 * https://www.geeksforgeeks.org/how-to-parse-local-html-file-in-python/
+* https://stackoverflow.com/questions/14924200/loading-huge-xml-files-and-dealing-with-memoryerror
 

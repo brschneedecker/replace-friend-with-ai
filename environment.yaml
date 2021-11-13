@@ -1,5 +1,6 @@
-name: jabber_html_env
+name: chats_ai_env
 channels:
   - defaults
 dependencies:
   - python=3.7.3
+  - bs4
