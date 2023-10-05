@@ -7,6 +7,9 @@ import re
 
 
 class Message:
+	'''
+	Chat message object
+	'''
 
 	def __init__(self, msg_id:str, msg_sender:str, timestamp:datetime.datetime, msg_text):
 		self.msg_id = msg_id
@@ -19,10 +22,17 @@ class Message:
 
 	def get_msg_text(self):
 		return self.msg_text
+	
 
 def parse_html_file(filepath:str):
 	"""
-	Given and HTML file, parse contents and return a list of message objects
+	Given an HTML file, parse contents and return a list of message objects
+
+	Args:
+	  - filepath: path to the HTML file to parse
+
+	Returns:
+	  - Yields Message objects with text parsed from the input data.
 	"""
 
 	html_file = open(filepath, "r")
@@ -36,34 +46,47 @@ def parse_html_file(filepath:str):
 		if message_text:
 			yield Message(None, None, None, message_text)
 
+
 def parse_xml_file(filepath:str, my_name:str, buddy_name:str, buddy_number:str):
+	'''
+	Parses XML backups for SMS text messages exported from Android
+
+	Args:
+	  - filepath: Location of XML files
+	  - my_name: Name of person running the app
+	  - buddy_name: Name of the friend app-runner texted with
+	  - buddy_number: Phone number of the friend app-runner texted with
+	'''
 
 	parser = ET.iterparse(filepath)
 
+	# Traverse XML
 	for event, element in parser:
-	    if element.tag == 'sms':
-	        address = element.attrib['address']
-	        address = re.sub('[()-]', '', address)
-	        address = address.replace('+1','')
-	        address = address.replace(' ','')
+		# Filter to SMS messages (no group chats)
+		if element.tag == 'sms':
+			address = element.attrib['address']
+			address = re.sub('[()-]', '', address)
+			address = address.replace('+1','')
+			address = address.replace(' ','')
 	        
-	        if address == buddy_number:
-	            msg_type = element.attrib['type']
-	            date = element.attrib['date']
-	            readable_date = element.attrib['readable_date']
-	            message_text = element.attrib['body']
+			# Filter to texts to/from friend
+			if address == buddy_number:
+				msg_type = element.attrib['type']
+				date = element.attrib['date']
+				readable_date = element.attrib['readable_date']
+				message_text = element.attrib['body']
 
-	            if msg_type == '1':
-	            	msg_sender = buddy_name
-	            elif msg_type == '2':
-	            	msg_sender = my_name
-	            else:
-	            	raise ValueError
+				if msg_type == '1':
+					msg_sender = buddy_name
+				elif msg_type == '2':
+					msg_sender = my_name
+				else:
+					raise ValueError
 
-	            yield Message(None, msg_sender, readable_date, message_text)
+				yield Message(None, msg_sender, readable_date, message_text)
 
-	    # then clean up
-	    element.clear()
+		# then clean up
+		element.clear()
 			
 			
 def parse_all_html_files(directory:str):
